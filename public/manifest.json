@@ -1,0 +1,17 @@
+{
+  "name": "Anushree Electrical — Payroll Dashboard",
+  "short_name": "Payroll",
+  "description": "Interactive payroll & attendance dashboard for Anushree Electrical Pvt. Ltd.",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#0e0f11",
+  "background_color": "#0e0f11",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
