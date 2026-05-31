@@ -23,6 +23,7 @@ import Employees         from './pages/Employees';
 import Holidays          from './pages/Holidays';
 import PayrollComponents from './pages/PayrollComponents';
 import EmpDocs           from './pages/EmpDocs';
+import AtlashAI          from './pages/AtlashAI';
 import Login             from './pages/Login';
 import CompanySetup      from './pages/CompanySetup';
 import UserManagement    from './pages/UserManagement';
@@ -898,6 +899,7 @@ function AppDashboard({ firms, activeFirmId, switchFirm, firebaseUser, userProfi
     { id: 'employees',  label: 'Employees',  icon: <Users           size={14} /> },
     { id: 'empdocs',    label: 'Emp. Docs',  icon: <FolderOpen      size={14} /> },
     { id: 'holidays',   label: 'Calendar',   icon: <CalendarRange   size={14} /> },
+    { id: 'atlashai',   label: 'Atlash AI',  icon: <Sparkles        size={14} /> },
   ];
 
   return (
@@ -1027,6 +1029,7 @@ function AppDashboard({ firms, activeFirmId, switchFirm, firebaseUser, userProfi
       {tab === 'empdocs'    && <EmpDocs />}
       {tab === 'components' && <PayrollComponents />}
       {tab === 'holidays'   && <Holidays />}
+      {tab === 'atlashai'   && <AtlashAI firebaseUser={firebaseUser} />}
 
       <footer style={{ marginTop: 60, paddingTop: 20, borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-faint)', fontSize: 12, flexWrap: 'wrap', gap: 12 }}>
         <span><Zap size={11} style={{ verticalAlign: 'middle' }} /> Data synced in real-time via Firebase</span>
