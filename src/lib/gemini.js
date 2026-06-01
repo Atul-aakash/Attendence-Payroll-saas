@@ -40,7 +40,7 @@ export async function callGemini(systemPrompt, userMessage, history = []) {
       });
 
       if (res.status === 429 || res.status === 503) {
-        lastError = new Error(`Quota exceeded on key …${key.slice(-4)}, trying next…`);
+        lastError = new Error(`Rate limit hit on key …${key.slice(-4)}.`);
         continue;
       }
 
@@ -54,7 +54,7 @@ export async function callGemini(systemPrompt, userMessage, history = []) {
       if (!text) throw new Error('Empty response from Gemini.');
       return text;
     } catch (err) {
-      if (err.message.includes('Quota exceeded') || err.message.includes('429')) {
+      if (err.message.includes('Rate limit') || err.message.includes('429')) {
         lastError = err;
         continue;
       }
@@ -62,5 +62,5 @@ export async function callGemini(systemPrompt, userMessage, history = []) {
     }
   }
 
-  throw lastError || new Error('All Gemini API keys have been exhausted.');
+  throw new Error('All API keys have hit their rate limit. Please wait a minute and try again.');
 }
