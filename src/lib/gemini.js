@@ -5,7 +5,7 @@ const API_KEYS = [
 ].filter(Boolean);
 
 const endpoint = (key) =>
-  `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`;
+  `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${key}`;
 
 export function hasGeminiKeys() {
   return API_KEYS.length > 0;
@@ -39,22 +39,24 @@ export async function callGemini(systemPrompt, userMessage, history = []) {
         body: JSON.stringify(body),
       });
 
-      if (res.status === 429 || res.status === 503) {
-        lastError = new Error(`Rate limit hit on key …${key.slice(-4)}.`);
-        continue;
-      }
+      const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        throw new Error(errData?.error?.message || `Gemini API error ${res.status}`);
+        const msg = data?.error?.message || `HTTP ${res.status}`;
+        console.error(`Gemini key …${key.slice(-4)} failed [${res.status}]:`, msg);
+
+        if (res.status === 429 || res.status === 503) {
+          lastError = new Error(`Rate limit on key …${key.slice(-4)}: ${msg}`);
+          continue;
+        }
+        throw new Error(`Gemini error [${res.status}]: ${msg}`);
       }
 
-      const data = await res.json();
       const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
       if (!text) throw new Error('Empty response from Gemini.');
       return text;
     } catch (err) {
-      if (err.message.includes('Rate limit') || err.message.includes('429')) {
+      if (err.message.includes('Rate limit')) {
         lastError = err;
         continue;
       }
@@ -62,5 +64,5 @@ export async function callGemini(systemPrompt, userMessage, history = []) {
     }
   }
 
-  throw new Error('All API keys have hit their rate limit. Please wait a minute and try again.');
+  throw lastError || new Error('All API keys exhausted.');
 }
