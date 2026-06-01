@@ -5,7 +5,7 @@ const API_KEYS = [
 ].filter(Boolean);
 
 const endpoint = (key) =>
-  `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${key}`;
+  `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${key}`;
 
 export function hasGeminiKeys() {
   return API_KEYS.length > 0;
